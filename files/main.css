@@ -1032,7 +1032,7 @@ label.invalidInput {color: #E80636;font-size: 90%;}
 .cartTable .buttons {display: block;float: left;width: 100%;margin: 30px 0 0;}
 .cartTable .buttons .button {float: right;}
 .cartTable .buttons .button i {margin-right: 10px;font-size: 21px;}
-.cartTable .inputText {text-align: center;padding: 0px;max-width: 80px;border-color: #dddddd;}
+.cartTable .inputText {text-align: center;padding: 0px;max-width: 50px;border-color: #dddddd;}
 .cartTable .inputText:disabled {background-color: #ececec;cursor: not-allowed;}
 .cartTable .qty-wrap a {vertical-align: middle;}
 
@@ -1196,6 +1196,33 @@ label.invalidInput {color: #E80636;font-size: 90%;}
 .stages-list .stages {display: inline-block;width: 49%;margin-bottom: 30px;}
 .step li {padding: 10px;}
 .cartTable .price {white-space: normal;}
+.cartTable thead {display: none;}
+.cartTable td.hide {display: none;}
+.cartTable tbody tr td, .cartTable thead tr td {border-bottom: 0;padding: 0;}
+.cartTable tbody tr {display: block;position: relative;width: 100%;float: left;}
+.cartTable tbody tr:last-child {margin: 0;}
+.cartTable tbody tr > td {display: inline-block;}
+.cartTable tbody tr .cart-name {display: block;text-align: center;margin-bottom: 0px;}
+.cartTable tbody tr td.image {display: block;text-align: center;}
+.cartTable tbody tr td.image img {margin: 10px;}
+.cartTable tbody tr td.name {display: block;border-top: 0;border-left: 1px solid #dddddd;padding: 10px;}
+.cartTable tbody tr td.cart-price.hide {display: none;}
+.cartTable tbody tr td.cart-price {display: inline-block;float: left;position: relative;width: calc(100% - 151px);line-height: 38px;text-align: center;border-left: 0;border-right: 0;}
+.cartTable tbody tr td.closetd {line-height: 40px;padding: 0 10px;}
+.cartTable tbody tr td.closetd .remove {vertical-align: middle;}
+.cartTable tbody tr td.cart-qty {display: inline-block;float: left;z-index: 1;}
+.cartTable tbody tr td.cart-qty .inputText {border: 0;background-color: transparent;height: 40px;}
+.cartTable tfoot tr {display: block;float: left;width: 100%;border-bottom: 0;}
+.cartTable tfoot tr > td {float: left;}
+.cartTable tfoot tr > td:last-child {float: right;}
+.cartTable tfoot tr.actions {border-bottom: 0;}
+.cartTable tfoot tr.actions td {display: block;width: 100%;}
+.cartTable tfoot tr.discounttr td, .cartTable tfoot tr.total td {width: 50%;height: 50px;line-height: 30px;border-top: 0;}
+.cartTable tfoot tr.total {border-top: 1px solid #dddddd;}
+.cartTable tfoot tr.total td.first {width: 70px;border-right: 0;padding: 10px 0;text-align: center;}
+.cartTable tfoot tr.total td.second {width: calc(100% - 71px);padding-right: 43px;text-align: center !important;}
+.formfast-cart {display: none !important;}
+#OrderAjaxBlock .formfast #closeOrder {display: inline-block;}
 .add-cart:hover:before, .add-cart:before {display: none;}
 .formfast .form-list .fields.deliveryConvenientDate .input-box select {margin-bottom: 15px;}
 .grid li {width: 33.3%;}
@@ -1258,33 +1285,6 @@ label.invalidInput {color: #E80636;font-size: 90%;}
 .goodsDataOpinionFormReset {width: 80px;}
 .step li {display: block;width: 100%;padding: 15px;}
 .step li.step_done {border-bottom: 1px solid rgba(255, 255, 255, 0.2);}
-.cartTable thead {display: none;}
-.cartTable td.hide {display: none;}
-.cartTable tbody tr td, .cartTable thead tr td {border-bottom: 0;padding: 0;}
-.cartTable tbody tr {display: block;position: relative;width: 100%;float: left;}
-.cartTable tbody tr:last-child {margin: 0;}
-.cartTable tbody tr > td {display: inline-block;}
-.cartTable tbody tr .cart-name {display: block;text-align: center;margin-bottom: 0px;}
-.cartTable tbody tr td.image {display: block;text-align: center;}
-.cartTable tbody tr td.image img {margin: 10px;}
-.cartTable tbody tr td.name {display: block;border-top: 0;border-left: 1px solid #dddddd;padding: 10px;}
-.cartTable tbody tr td.cart-price.hide {display: none;}
-.cartTable tbody tr td.cart-price {display: inline-block;float: left;position: relative;width: calc(100% - 115px);line-height: 38px;text-align: center;border-left: 0;border-right: 0;}
-.cartTable tbody tr td.closetd {line-height: 40px;padding: 0 10px;}
-.cartTable tbody tr td.closetd .remove {vertical-align: middle;}
-.cartTable tbody tr td.cart-qty {display: inline-block;float: left;z-index: 1;}
-.cartTable tbody tr td.cart-qty .inputText {border: 0;background-color: transparent;height: 40px;max-width: 70px;}
-.cartTable tfoot tr {display: block;float: left;width: 100%;border-bottom: 0;}
-.cartTable tfoot tr > td {float: left;}
-.cartTable tfoot tr > td:last-child {float: right;}
-.cartTable tfoot tr.actions {border-bottom: 0;}
-.cartTable tfoot tr.actions td {display: block;width: 100%;}
-.cartTable tfoot tr.discounttr td, .cartTable tfoot tr.total td {width: 50%;height: 50px;line-height: 30px;border-top: 0;}
-.cartTable tfoot tr.total {border-top: 1px solid #dddddd;}
-.cartTable tfoot tr.total td.first {width: 70px;border-right: 0;padding: 10px 0;text-align: center;}
-.cartTable tfoot tr.total td.second {width: calc(100% - 71px);padding-right: 43px;text-align: center !important;}
-.formfast-cart {display: none !important;}
-#OrderAjaxBlock .formfast #closeOrder {display: inline-block;}
 .filters-goods .filter {width: 47%;}
 .filters-goods .filter:nth-child(3n) {margin-right: 15px;}
 .filters-goods .filter:nth-child(2n) {margin-right: 0;}
