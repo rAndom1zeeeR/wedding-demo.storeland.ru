@@ -178,10 +178,10 @@
           <div class="qty-wrap">
             <span class="label">Количество:</span>
             <div class="qty">
-              <input type="text" name="form[goods_mod_quantity]" maxlength="4" value="1" min="1" title="Количество" class="inputText quantity" onkeypress="return keyPress(this, event);" onpaste="return false;" autocomplete="off">
-              <div class="qty-nav">
-                <a id="qty_plus" href="javascript:void(0)" class="qty-plus unselectable" title="Увеличить"></a>
-                <a id="qty_minus" href="javascript:void(0)" class="qty-minus unselectable" title="Уменьшить"></a>
+              <div class="qty-wrap">
+                <a href="javascript:void(0)" class="qty-minus unselectable" title="Уменьшить"><i class="material-icons">remove</i></a>
+                <input type="text" name="form[goods_mod_quantity]" maxlength="4" value="1" min="1" title="Количество" class="inputText quantity" onkeypress="return keyPress(this, event);" onpaste="return false;" autocomplete="off">
+                <a href="javascript:void(0)" class="qty-plus unselectable" title="Увеличить"><i class="material-icons">add</i></a>
               </div>
             </div>
           </div>

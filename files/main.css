@@ -1034,6 +1034,7 @@ label.invalidInput {color: #E80636;font-size: 90%;}
 .cartTable .buttons .button i {margin-right: 10px;font-size: 21px;}
 .cartTable .inputText {text-align: center;padding: 0px;max-width: 80px;border-color: #dddddd;}
 .cartTable .inputText:disabled {background-color: #ececec;cursor: not-allowed;}
+.cartTable .qty-wrap a {vertical-align: middle;}
 
 /*** Новости ***/
 .news-box {position: relative;}
