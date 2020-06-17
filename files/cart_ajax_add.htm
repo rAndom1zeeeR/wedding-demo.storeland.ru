@@ -1,0 +1,67 @@
+<div id="cart-layer">
+  <div class="cart-ajax">
+    {% IF FORM_NOTICE %}<h4 class="title {% IF FORM_NOTICE_IS_GOOD %}success{% ELSE %}warning{% ENDIF %}">{FORM_NOTICE}</h4>{% ENDIF %}
+    {% FOR cart_items %}
+      {% IF cart_items.GOODS_MOD_ID = FORM_GOODS_MOD_ID %}
+      <div class="cart-product">
+        <div class="image">
+          <a href="{cart_items.GOODS_URL}"><img src="{% IF cart_items.GOODS_IMAGE_EMPTY %}{ASSETS_IMAGES_PATH}no-photo-icon.png?design=wedding{% ELSE %}{cart_items.GOODS_IMAGE_ICON}{% ENDIF %}" class="goods-image-icon" alt="{cart_items.GOODS_NAME}" title="{cart_items.GOODS_NAME}"></a>
+        </div>
+      </div>
+      {% ENDIF %}
+    {% ENDFOR %}
+    <div class="buttons">
+      <button type="submit" class="button button2 fancyModalClose" id="quickform-close">Продолжить</button>
+      <button type="button" class="button quickform" id="quickform-order" onclick="document.location='{CART_URL}';return false;">В корзину</button>
+    </div>
+  </div>
+</div>
+
+<!-- Блок для обновления данных корзины. Не виден пользователю -->
+<div style="display:none;" id="newCartCount">
+  <a href="{CART_URL}" title="Перейти в Корзину" class="title">
+    <i class="material-icons">shopping_basket</i>
+    <span class="count" data-count="{CART_COUNT_TOTAL}">{CART_COUNT_TOTAL}</span>
+  </a>
+</div>
+<div style="display:none;" id="newCartData">
+  <!-- Выпадающая корзина-->
+  <div class="cart-content">
+    <div class="empty hide">Корзина покупок пуста.<br/> Вы можете выбрать товар из <a href="{CATALOG_URL}" title="Перейти в каталог">Каталога</a></div>
+    {% IF cart_count_empty %}
+    <div class="empty">Корзина покупок пуста.<br/> Вы можете выбрать товар из <a href="{CATALOG_URL}" title="Перейти в каталог">Каталога</a></div>
+    {% ELSE %}
+    <ul class="cart-products-list">
+      {% FOR cart_items %}
+      <li class="item">
+        <a data-href="{cart_items.ORDER_LINE_DELETE_URL}" data-count="{cart_items.ORDER_LINE_QUANTITY}" title="Удалить позицию" class="remove x" onclick="removeFromCart($(this))"></a>
+        <a href="{cart_items.GOODS_URL}" title="{cart_items.GOODS_NAME}" class="product-image"><img src="{% IF cart_items.GOODS_IMAGE_EMPTY %}{ASSETS_IMAGES_PATH}no-photo-icon.png?design=wedding{% ELSE %}{cart_items.GOODS_IMAGE_ICON}{% ENDIF %}" alt="{cart_items.GOODS_NAME}" class="goods-image-icon"></a>
+        <div class="product-details">
+          <div class="product-name"><a href="{cart_items.GOODS_URL}" title="{cart_items.GOODS_NAME}">{cart_items.GOODS_NAME}</a></div>
+          {% IFNOT cart_items.distinctive_properties_empty %}<div class="product-mod">{% FOR distinctive_properties %}{cart_items.distinctive_properties.VALUE}{% IFNOT cart_items.distinctive_properties.last %}, {% ENDIF %}{% ENDFOR %}</div>{% ENDIF %}
+          <div class="price-box {CURRENCY_CHAR_CODE}">
+            <span class="quantity">{cart_items.ORDER_LINE_QUANTITY} x </span>
+            <span class="price" data-price="{cart_items.GOODS_MOD_PRICE_NOW}">{cart_items.GOODS_MOD_PRICE_NOW | money_format}</span>
+          </div>
+        </div>
+      </li>
+      {% ENDFOR %}
+    </ul>
+    <div class="subtotal">
+      <span class="label">Итого:</span>
+      <span class="price total-sum {CURRENCY_CHAR_CODE}">{CART_SUM_NOW | money_format}</span>
+    </div>
+    <div class="actions">
+      <a class="button" title="Перейти к оформлению заказа" href="{CART_URL}">Оформить заказ</a>
+      <a class="button button2" title="Очистить корзину" href="{CART_TRUNCATE_URL}" data-href="{CART_TRUNCATE_URL}" onclick="removeFromCartAll($(this))">Очистить корзину</a>
+    </div>
+    {% ENDIF %}
+  </div>
+  <!-- /END Выпадающая корзина-->
+</div>
+<!-- Обновление данных корзины -->
+<script>
+$('#header .cart .title').html($('#newCartCount').html());
+$('#header .cart .dropdown').html($('#newCartData').html());
+$('.fancyModalClose').click(function(){$.fancybox.close();});
+</script>

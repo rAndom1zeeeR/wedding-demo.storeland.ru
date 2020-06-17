@@ -1,0 +1,79 @@
+<div class="contact-info f-fix">
+  <div class="row">
+    {% IF FORM_NOTICE %}<div class="message {% IF FORM_NOTICE_IS_GOOD %}success{% ELSE %}warning{% ENDIF %}">{FORM_NOTICE | nl2br}</div>{% ENDIF %}
+    {% IFNOT FORM_SEND_OK %}
+    <div class="col-md-6 col-xs-12 first">
+      <div class="col-account">
+        <h3>Форма связи</h3>
+        <form method="post" action="{FEEDBACK_URL}" class="feedbackForm" enctype="multipart/form-data">
+          <input type="hidden" name="hash" value="{HASH}" />
+          <!-- Набор полей которые не видит пользователь, но видят боты. Когда они их заполняют мы точно знаем, что их прислал нам бот и мы не сохраняем подобный отзыв о товаре, а боту отправившему отзыв сообщаем, что отзыв добавлен успешно, но будет отображён здесь после прохождения модерации -->
+          {ANTISPAM_CODE}
+          <div class="form-list">
+            <div class="fields">
+              <span class="input">
+                <label class="input-label" for="feedback_name">
+                  <span class="input-label-content required">Представьтесь, пожалуйста: <em>*</em></span>
+                </label>
+                <input id="feedback_name" class="input-field required" type="text" name="form[{ANTISPAM_FORM_FIELD_NAME_FEEDBACK_NAME}]" value="{FORM_FEEDBACK_NAME}" autocomplete="off" />
+              </span>
+            </div>
+            <div class="fields">
+              <span class="input">
+                <label class="input-label" for="feedback_email">
+                  <span class="input-label-content required">Электронная почта: <em>*</em></span>
+                </label>
+                <input id="feedback_email" class="input-field required" type="text" name="form[{ANTISPAM_FORM_FIELD_NAME_FEEDBACK_EMAIL}]" value="{FORM_FEEDBACK_EMAIL}" autocomplete="off" />
+              </span>
+            </div>
+            <div class="fields">
+              <span class="input">
+                <label class="input-label" for="feedback_phone">
+                  <span class="input-label-content">Телефон:</span>
+                </label>
+                <input id="feedback_phone" class="input-field" type="text" name="form[Телефон]"  value="{FORM_FEEDBACK_PHONE}" autocomplete="off" />
+              </span>
+            </div>
+            <div class="fields">
+              <span class="input textarea">
+                <label class="input-label" for="feedback_message">
+                  <span class="input-label-content required">Текст сообщения: <em>*</em></span>
+                </label>
+                <textarea id="feedback_message" rows="4" name="form[{ANTISPAM_FORM_FIELD_NAME_FEEDBACK_MESSAGE}]" class="input-field required">{FORM_FEEDBACK_MESSAGE}</textarea>
+              </span>
+            </div>
+            <div class="file">
+              <label for="feedback_file">Прикрепить файл</label>
+              <div class="input-box">
+                <input id="feedback_file" type="file" name="form[assets_file]" value=""  class="">
+              </div>
+            </div>
+          </div>
+          <div class="pp">Нажимая на кнопку Отправить, Вы соглашаетесь с <a data-fancybox data-src="#fancybox-pp" href="javascript:;">правилами обработки данных</a></div>
+          <button type="submit" title="Отправить" class="button"><span>Отправить</span></button>
+        </form>
+      </div>
+    </div>
+    {% ENDIF %}
+    <div class="col-md-6 col-xs-12 second">
+      <div class="col-account" itemscope itemtype="https://schema.org/Organization">
+        <meta itemprop="name" content="{SETTINGS_STORE_ORG_NAME}"/>
+        <h3>Наши контакты</h3>
+        <div class="block-contact">
+          <div itemprop="address" itemscope itemtype="https://schema.org/PostalAddress">
+          {% IF SETTINGS_STORE_REGION %}<div itemprop="addressLocality"><i class="material-icons">room</i>{SETTINGS_STORE_REGION}</div>{% ENDIF %}
+          </div>
+          {% IF SETTINGS_STORE_WORK_TIME %}<div><i class="material-icons">access_time</i>{SETTINGS_STORE_WORK_TIME}</div>{% ENDIF %}
+          {% IF SETTINGS_STORE_PHONE_NUMBER1 %}<div itemprop="telephone"><i class="material-icons">phone</i><a href="tel:{SETTINGS_STORE_PHONE_COUNTRY_CODE1}{SETTINGS_STORE_PHONE_CITY_CODE1}{SETTINGS_STORE_PHONE_NUMBER1}">{SETTINGS_STORE_PHONE_COUNTRY_CODE1}({SETTINGS_STORE_PHONE_CITY_CODE1}){SETTINGS_STORE_PHONE_NUMBER1}</a></div>{% ENDIF %}
+          {% IF SETTINGS_STORE_PHONE_NUMBER2 %}<div itemprop="telephone"><i class="material-icons">phone</i><a href="tel:{SETTINGS_STORE_PHONE_COUNTRY_CODE2}{SETTINGS_STORE_PHONE_CITY_CODE2}{SETTINGS_STORE_PHONE_NUMBER2}">{SETTINGS_STORE_PHONE_COUNTRY_CODE2}({SETTINGS_STORE_PHONE_CITY_CODE2}){SETTINGS_STORE_PHONE_NUMBER2}</a></div>{% ENDIF %}
+          {% IF SETTINGS_STORE_PHONE_NUMBER3 %}<div itemprop="faxNumber"><i class="material-icons">phone</i><a href="tel:{SETTINGS_STORE_PHONE_COUNTRY_CODE3}{SETTINGS_STORE_PHONE_CITY_CODE3}{SETTINGS_STORE_PHONE_NUMBER3}">{SETTINGS_STORE_PHONE_COUNTRY_CODE3}({SETTINGS_STORE_PHONE_CITY_CODE3}){SETTINGS_STORE_PHONE_NUMBER3}</a></div>{% ENDIF %}
+          {% IF SETTINGS_STORE_EMAIL_MAIN %}<div itemprop="email"><i class="material-icons">email</i><a href="mailto:{SETTINGS_STORE_EMAIL_MAIN}">{SETTINGS_STORE_EMAIL_MAIN}</a></div>{% ENDIF %}
+          {% IF SETTINGS_STORE_SKYPE %}<div><i class="fa fa-skype"></i><a href="skype:{SETTINGS_STORE_SKYPE}?call">{SETTINGS_STORE_SKYPE}</a></div>{% ENDIF %}
+        </div>
+      </div>
+    </div>
+    <div class="maps col-xs-12">
+      <iframe src="https://api-maps.yandex.ru/frame/v1/-/CZRYYCOw" width="100%" height="400" frameborder="0"></iframe>
+    </div>
+  </div>
+</div>

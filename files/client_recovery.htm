@@ -1,0 +1,44 @@
+<div class="account row">
+{% IF FORM_NOTICE %}<div class="message {% IF FORM_NOTICE_IS_GOOD %}success{% ELSE %}warning{% ENDIF %}">{FORM_NOTICE | nl2br}</div>{% ENDIF %}
+  <form action="{USER_RECOVERY_URL}" method="post" class="clientForm"> 
+    <input type="hidden" name="hash" value="{HASH}" />
+    <div class="col-md-6 col-xs-12 first">
+      <div class="col-account">
+        <h3>Восстановление доступа</h3>
+        <p>Забыли пароль? Ничего страшного. Сейчас мы его восстановим!<br> Для этого укажите свою почту, на которую будет отправлена ссылка для активации аккаунта, и новый пароль, с которым Вы будете заходить на сайт.</p>
+        <div class="form-list">
+          <div class="fields">
+            <label for="sites_client_mail" class="required">Электронная почта <em>*</em></label>
+            <input id="sites_client_mail" type="text" name="form[sites_client_mail]"  value="{FORM_SITES_CLIENT_MAIL}" maxlength="255" class="inputText email">
+          </div>
+          <div class="fields">
+            <label for="sites_client_pass" class="required">Придумайте новый пароль <em>*</em></label>
+            <input id="sites_client_pass" type="password" name="form[sites_client_pass]" value="{FORM_SITES_CLIENT_PASS}" maxlength="50" minlength="6" class="inputText"   onkeyup="checkCapsWarning(event)" onfocus="checkCapsWarning(event)" onblur="removeCapsWarning()"/>
+            {% IFNOT user_agent_ie %}
+              <div class="showPassBlock"><a href="#" rel="Скрыть пароль" class="showPass">Показать пароль</a></div>
+            {% ENDIF %}
+              <div id="caps_lock"> 
+                <span class="fa fa-warning"></span><br/>
+                <strong>Caps Lock включен.</strong><br/>
+                <span>Пароль может быть введен неверно.</span>
+              </div>
+          </div>
+        </div>
+        <div class="buttons">
+          <button type="submit" title="Восстановить" class="button">Восстановить</button>
+          <p class="required"><em>*</em> Обязательные поля</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-xs-12 second">
+      <div class="col-account">
+        <h3>Ваш аккаунт</h3>
+        <p>Если Вы уже имеете аккаунт у нас, пожалуйста входите. <br/>Если Вы забыли пароль, вопользуйтесь формой восстановления.</p>
+        <div class="buttons">
+          <a href="{USER_LOGIN_URL}" class="button">Вход с паролем</a>
+          <a href="{USER_REGISTER_URL}" class="button">Зарегистрироваться</a>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

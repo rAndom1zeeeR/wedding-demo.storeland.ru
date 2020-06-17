@@ -1,0 +1,52 @@
+<div class="account cart-info">
+{% IF FORM_NOTICE %}<div class="message {% IF FORM_NOTICE_IS_GOOD %}success{% ELSE %}warning{% ENDIF %}">{FORM_NOTICE | nl2br}</div>{% ENDIF %}
+
+{% IF favorites_goods_empty %}
+  <p class="attention">Ваш список избранных товаров пуст. Вы можете добавлять сюда товары из <a href="{CATALOG_URL}">каталога</a></p>
+{% ELSE %}
+
+  <div class="scroll"> 
+    <table class="table-box"> 
+      <thead> 
+        <tr> 
+          <td class="image">Фото</td> 
+          <td class="name">Название товара</td> 
+          <td class="">Цена</td> 
+          <td class="total">Действие</td> 
+        </tr> 
+      </thead>  
+      <tbody>
+        <!-- Избранные товары -->
+        {% IFNOT favorites_goods_empty %}
+          {% FOR favorites_goods %}
+            <tr>
+              <td><div class="image"><a title="Перейти на страницу &laquo;{favorites_goods.NAME}&raquo;" href="{favorites_goods.URL}"><img class="goods-image-icon" src="{% IF favorites_goods.IMAGE_EMPTY %}{ASSETS_IMAGES_PATH}no-photo-icon.png?design=wedding{% ELSE %}{favorites_goods.IMAGE_ICON}{% ENDIF %}" alt="{favorites_goods.NAME}"></a></div></td>
+              <td class="name"><a title="Перейти на страницу &laquo;{favorites_goods.NAME}&raquo;" href="{favorites_goods.URL}">{favorites_goods.NAME}</a></td>
+              <td width="100">
+                <span class="">{favorites_goods.MIN_PRICE_NOW | money_format}</span>
+              </td>
+              <td width="80"> 
+                <form action="{CART_ADD_GOODS_MODIFICATION_URL | url_amp}" method="post" class="goodsListForm product-form-{favorites_goods.MIN_PRICE_NOW_ID}">
+                  <input type="hidden" name="hash" value="{HASH}" />
+                  <input type="hidden" name="form[goods_from]" value="{favorites_goods.GOODS_FROM}" />
+                  <input type="hidden" name="form[goods_mod_id]" value="{favorites_goods.MIN_PRICE_NOW_ID}" />
+                  <a class="button small add-cart quick" title="Быстро оформить заказ" {% IF SETTINGS_GOODS_DONT_PUT_TO_CART_MORE_THAN_AVAILABLE %}{% IF favorites_goods.MIN_REST_VALUE=0 %}style="display:none;"{% ENDIF %}{% ENDIF %}>Купить</a>
+                  <!--a class="button small add-cart" title="В Корзину" {% IF SETTINGS_GOODS_DONT_PUT_TO_CART_MORE_THAN_AVAILABLE %}{% IF favorites_goods.MIN_REST_VALUE=0 %}style="display:none;"{% ENDIF %}{% ENDIF %}>Купить</a-->
+                </form>
+                <a data-action-delete-url="{FAVORITES_DELETE_URL}" href="{FAVORITES_DELETE_URL}?id={favorites_goods.MIN_PRICE_NOW_ID}&amp;return_to={CURRENT_URL | urlencode}" class="remove" title="Удалить" style="margin-top: 10px;"></a>
+              </td>
+            </tr>
+          {% ENDFOR %}
+        {% ELSE %}
+          Избранных товаров нет.
+        {% ENDIF %}
+        <!-- END Избранные товары -->
+      </tbody>
+    </table>  
+  </div>
+{% ENDIF %}
+
+  <div class="buttons"> 
+    <a href="{USER_SETTINGS_URL}" class="button" title="Назад на главную страниц личного кабинета">Назад</a>
+  </div>
+</div>
