@@ -843,8 +843,12 @@ label.invalidInput {color: #E80636;font-size: 90%;}
 .product-view .product-shop .goodsDataMainModificationsBlock .goodsDataMainModificationsBlockProperty select, .product-view .product-shop .goodsDataMainModificationsBlock .goodsDataMainModificationsBlockProperty select {display: inline-block;width: 100%;line-height: 1.2;padding-right: 28px;text-indent: 0.01px;cursor: pointer;padding: 12px 0 12px 15px;border: 1px solid #ddd;background-color: #ffffff;border-radius: 0px;background-image: url("{ASSETS_IMAGES_PATH}ico-select.svg?design=wedding");background-repeat: no-repeat;background-position: right 10px center;-webkit-appearance: none;-moz-appearance: none;appearance: none;}
 .product-view .product-shop .goodsDataMainModificationsBlock .goodsDataMainModificationsDescriptionBlock {display: none;padding: 10px 20px 20px 20px;}
 .product-view .product-shop .add-to-box {margin-top: 5px;padding: 10px 0;}
-.product-view .product-shop .add-to-box .add-to-cart {display: -webkit-flex;display: -ms-flexbox;display: flex;flex-direction: row;justify-content: space-between;}
-.product-view .product-shop .add-to-box .add-to-cart .qty-wrap {display: none;}
+.product-view .product-shop .add-to-box .add-to-cart {display: -webkit-flex;display: -ms-flexbox;display: flex;flex-direction: row;justify-content: space-between;flex-wrap: wrap;}
+.product-view .product-shop .add-to-box .add-to-cart .qty-wrap {width: 100%;margin-bottom: 10px;}
+.product-view .product-shop .add-to-box .add-to-cart .qty-wrap .label {display: block;margin-bottom: 5px;}
+.product-view .product-shop .add-to-box .add-to-cart .qty-wrap .qty {max-width: 150px;}
+.product-view .product-shop .add-to-box .add-to-cart .qty-wrap a {display: inline-block;vertical-align: middle;}
+.product-view .product-shop .add-to-box .add-to-cart .qty-wrap input {display: inline-block;vertical-align: middle;width: 60px;}
 .product-view .product-shop .add-to-box .add-to-cart .more {display: none;}
 .product-view .product-shop .add-to-box .add-to-cart .button, .product-view .product-shop .add-to-box .add-to-links a {width: 48%;height: 45px;line-height: 45px;margin-bottom: 15px;padding: 0;}
 .product-view .product-shop .add-to-box .add-to-cart .button i {font-size: 16px;margin-right: 5px;vertical-align: middle;}
@@ -1035,6 +1039,7 @@ label.invalidInput {color: #E80636;font-size: 90%;}
 .cartTable .inputText {text-align: center;padding: 0px;max-width: 50px;border-color: #dddddd;}
 .cartTable .inputText:disabled {background-color: #ececec;cursor: not-allowed;}
 .cartTable .qty-wrap a {vertical-align: middle;}
+.cartTable .qty-wrap {width: 150px;margin: 0 auto;}
 
 /*** Новости ***/
 .news-box {position: relative;}
@@ -1210,6 +1215,7 @@ label.invalidInput {color: #E80636;font-size: 90%;}
 .cartTable tbody tr td.cart-price {display: inline-block;float: left;position: relative;width: calc(100% - 151px);line-height: 38px;text-align: center;border-left: 0;border-right: 0;}
 .cartTable tbody tr td.closetd {line-height: 40px;padding: 0 10px;}
 .cartTable tbody tr td.closetd .remove {vertical-align: middle;}
+.cartTable .qty-wrap {width: auto;}
 .cartTable tbody tr td.cart-qty {display: inline-block;float: left;z-index: 1;}
 .cartTable tbody tr td.cart-qty .inputText {border: 0;background-color: transparent;height: 40px;}
 .cartTable tfoot tr {display: block;float: left;width: 100%;border-bottom: 0;}
