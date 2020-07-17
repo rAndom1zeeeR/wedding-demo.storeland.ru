@@ -1,12 +1,12 @@
 // VARIABLES & PATHS
 let preprocessor = 'scss', // Preprocessor (sass, scss, less, styl),
 	preprocessorOn = false,
-    fileswatch   = 'html,htm', // List of files extensions for watching & hard reload (comma separated)
-    imageswatch  = 'jpg,jpeg,png,webp,svg,gif', // List of images extensions for watching & compression (comma separated)
-    fontsswatch  = 'eot,woff,woff2,ttf', // List of images extensions for watching & compression (comma separated)
-    baseDir      = 'files', // Base directory path without «/» at the end
-    online       = true, // If «false» - Browsersync will work offline without internet connection
-	WAIT_TIME    = 2000;  // Время задержки перед обновлением страницы.
+	fileswatch   = 'html,htm', // List of files extensions for watching & hard reload (comma separated)
+	imageswatch  = 'jpg,jpeg,png,webp,svg,gif', // List of images extensions for watching & compression (comma separated)
+	fontsswatch  = 'eot,woff,woff2,ttf', // List of images extensions for watching & compression (comma separated)
+	baseDir      = 'files', // Base directory path without «/» at the end
+	online       = true, // If «false» - Browsersync will work offline without internet connection
+	WAIT_TIME    = 0;  // Время задержки перед обновлением страницы.
 
 let paths = {
 
@@ -18,7 +18,7 @@ let paths = {
 	},
 
 	styles: {
-		src:  (preprocessorOn) ? baseDir + '/' + preprocessor + '/main.scss' : baseDir + '/main.css',				
+		src:  (preprocessorOn) ? baseDir + '/' + preprocessor + '/main.scss' : baseDir + '/main.css',
 		dest: baseDir + '/',
 	},
 
@@ -76,12 +76,12 @@ function browsersync() {
 	browserSync.init({
 		notify: false,
 		proxy: {
-			target: `${SITE}`,     
+			target: `${SITE}`,
 			proxyReq: [
 				function(proxyReq) {
-					proxyReq.setHeader('x-nodejs-editor-version', '1.01');            
+					proxyReq.setHeader('x-nodejs-editor-version', '1.01');
 				}
-			] 
+			]
 		},
 		online,
 		injectChanges: true,
@@ -92,33 +92,33 @@ function browsersync() {
 
 function scripts() {
 	return src(paths.scripts.src)
-	.pipe(wait(WAIT_TIME))
-	.pipe(browserSync.stream())
+		.pipe(wait(WAIT_TIME))
+		.pipe(browserSync.stream())
 }
 
 function styles() {
 	if(preprocessorOn){
 		return src(paths.styles.src)
-		.pipe(plumber())
-		.pipe(eval(preprocessor)({ includePaths : ['./files/scss/templates/'] }))
-		// .pipe(concat(paths.cssOutputName))
-		// .pipe(autoprefixer({ overrideBrowserslist: ['last 10 versions'], grid: true }))
-		// .pipe(cleancss( {level: { 1: { specialComments: 0 } }, /* format: 'beautify' */ }))
-		.pipe(dest(paths.styles.dest))
-		// .pipe(wait(1500))
-		.pipe(browserSync.stream())
+			.pipe(plumber())
+			.pipe(eval(preprocessor)({ includePaths : ['./files/scss/templates/'] }))
+			// .pipe(concat(paths.cssOutputName))
+			// .pipe(autoprefixer({ overrideBrowserslist: ['last 10 versions'], grid: true }))
+			// .pipe(cleancss( {level: { 1: { specialComments: 0 } }, /* format: 'beautify' */ }))
+			.pipe(dest(paths.styles.dest))
+			// .pipe(wait(1500))
+			.pipe(browserSync.stream())
 	} else {
 		return src(paths.styles.src)
-		.pipe(wait(WAIT_TIME))
-		.pipe(browserSync.stream())
+			.pipe(wait(WAIT_TIME))
+			.pipe(browserSync.stream())
 	}
 }
 
 function images() {
 	return src(paths.images.src)
-	.pipe(newer(paths.images.dest))
-	.pipe(imagemin())
-	.pipe(dest(paths.images.dest))
+		.pipe(newer(paths.images.dest))
+		.pipe(imagemin())
+		.pipe(dest(paths.images.dest))
 }
 
 function cleanimg() {
@@ -130,28 +130,43 @@ function startwatch() {
 	if(preprocessorOn){
 		watch(baseDir  + '/**/*.scss', { delay: 100 }, styles);
 	}
+	// Загрузка css файлов
 	watch(baseDir  + '/**/*.css').on('change', function(event){
-		uploadFile(event);	
-	})	
-	watch(baseDir  + '/**/*.{' + imageswatch + '}')
-	.on('add', function(event){
-		uploadFile(event)
+		uploadFile(event);
+		if(!preprocessorOn){
+			styles()
+		}
 	})
-	.on('change', function(event){
-		uploadFile(event)
-	});
+	// Загрузка изображений
+	watch(baseDir  + '/**/*.{' + imageswatch + '}')
+		.on('add', function(event){
+			uploadFile(event)
+		})
+		.on('change', function(event){
+			uploadFile(event)
+		});
+	// Загрузка htm файлов
 	watch(baseDir  + '/**/*.{' + fileswatch + '}').on('change', function(event){
 		uploadFile(event)
 	});
+	// Загрузка js файлов
 	watch([baseDir + '/**/*.js']).on('change', function(event){
 		uploadFile(event);
 	})
+	// Загрузка шрифтов
+	watch(baseDir  + '/**/*.{' + fontsswatch + '}')
+		.on('add', function(event){
+			uploadFile(event)
+		})
+		.on('change', function(event){
+			uploadFile(event)
+		});
 }
 
 function uploadFile(event){
 	let file = event;
 	let fileName = path.basename(file)
-	let fileExt =  path.extname(file);	
+	let fileExt =  path.extname(file);
 
 	new Promise(resolve => {
 		fs.readFile(`${file}`, {encoding: 'utf8'}, (err, data) =>{
@@ -159,38 +174,41 @@ function uploadFile(event){
 			resolve(base64encode(data));
 		});
 
-		if(imageswatch.includes(fileExt.replace('.',''))){				
+		if(imageswatch.includes(fileExt.replace('.',''))){
 			resolve(Buffer.from(fs.readFileSync(file)).toString('base64'))
 		}
 	})
-	.then((encoded) => {		
-		let params = new URLSearchParams();
-		params.append('secret_key', SECRET_KEY);
-		params.append('form[file_name]', `${fileName}`);
-		params.append('form[file_content]', `${encoded}`);
-		// if(fileName.includes('css')){
+		.then((encoded) => {
+			let params = new URLSearchParams();
+			params.append('secret_key', SECRET_KEY);
+			params.append('form[file_name]', `${fileName}`);
+			params.append('form[file_content]', `${encoded}`);
+			// if(fileName.includes('css')){
 			params.append('form[do_not_receive_file]', `1`);
-		// }	
-	
-		fetch(href, {
-			method: 'post',
-			body:    params,
-			timeout: 5000,
+			// }
+
+			fetch(href, {
+				method: 'post',
+				body:    params,
+				timeout: 5000,
+			})
+				.then(res => res.json())
+				.then(json=>{
+					if(json.status === `ok`){
+						console.log(`[${moment().format("HH:mm:ss")}] Файл ${chalk.red(fileName)} успешно отправлен ✔️`);
+
+						// Если это htm файлы
+						fileExt = fileExt.replace('.','');
+						if(fileswatch.includes(fileExt)){
+							browserSync.reload()
+						}
+					} else if (json.status == `error`) {
+						console.log(`Ошибка отправки ⛔ ${fileName}`);
+						console.log(`${json.message}`);
+					}
+				});
 		})
-		.then(res => res.json())
-		.then(json=>{
-			if(json.status === `ok`){
-				console.log(`[${moment().format("HH:mm:ss")}] Файл ${chalk.red(fileName)} успешно отправлен ✔️`); 
-				setTimeout(() => {
-					browserSync.reload()
-				}, WAIT_TIME);
-			} else if (json.status == `error`) {
-				console.log(`Ошибка отправки ⛔ ${fileName}`); 
-				console.log(`${json.message}`);                                        
-			}
-		}); 
-	})
-	.catch(err => console.error(err));
+		.catch(err => console.error(err));
 }
 function downloadFiles(done) {
 	const FILES_PATH = './files';
@@ -202,68 +220,68 @@ function downloadFiles(done) {
 		body:    params,
 		timeout: 5000,
 	})
-	.then(res => res.json())
-	.then(json => {
-		if(json.status === `ok`) {
-		  console.log(`Загружен список всех файлов ✔️`);  
-		  
-		  if (!fs.existsSync(FILES_PATH)){
-			  fs.mkdirSync(FILES_PATH);
-		  }			
-		  const filesArray = json.data.map((item)=>{
-			  return {
-				file_id: item['file_id']['value'],
-				file_name: item['file_name']['value'],
-			  }
-		  });
-		  return filesArray;
+		.then(res => res.json())
+		.then(json => {
+			if(json.status === `ok`) {
+				console.log(`Загружен список всех файлов ✔️`);
 
-		} else if (json.status == `error`) {
-		  console.log(`Ошибка загрузки ⛔`);                         
-		}
-	})
-	.then(array =>{
-		console.log(`Всего файлов ${array.length}`);
-		const arrLength = array.length;
-		let count = 1;
-		const getFile = (arr) => {
-			if(!arr.length){
-				console.log(`Всего скачано файлов ${count} из ${arrLength}`)
-				done();
-				return;
-			}
-			const {file_id, file_name} = arr.shift();
-			
-			let params = new URLSearchParams();
-			params.append('secret_key', SECRET_KEY);
-			
-			fetch(`${SITE}/api/v1/site_files/get/${file_id}`, {
-				method: 'post',
-				body:    params,
-				timeout: 5000,
-			})
-			.then(res => res.json())
-			.then(json => {		
-				if(json.status === `ok`) {						
-					return json;
-				}	
-			})
-			.then(json => {
-				fs.writeFile(`${FILES_PATH}/${json['data']['file_name'].value}`, json['data']['file_content'].value, 'base64', function(err) {
-					if(err){
-						console.log(err);
+				if (!fs.existsSync(FILES_PATH)){
+					fs.mkdirSync(FILES_PATH);
+				}
+				const filesArray = json.data.map((item)=>{
+					return {
+						file_id: item['file_id']['value'],
+						file_name: item['file_name']['value'],
 					}
-
-					console.log(`Скачан файл ${file_name}. Всего ${count} из ${arrLength}`);
-					getFile(array);						
-					count++;
 				});
-			})
-			.catch(console.log)	
+				return filesArray;
 
-		}
-		getFile(array);
-	})
+			} else if (json.status == `error`) {
+				console.log(`Ошибка загрузки ⛔`);
+			}
+		})
+		.then(array =>{
+			console.log(`Всего файлов ${array.length}`);
+			const arrLength = array.length;
+			let count = 1;
+			const getFile = (arr) => {
+				if(!arr.length){
+					console.log(`Всего скачано файлов ${count} из ${arrLength}`)
+					done();
+					return;
+				}
+				const {file_id, file_name} = arr.shift();
+
+				let params = new URLSearchParams();
+				params.append('secret_key', SECRET_KEY);
+
+				fetch(`${SITE}/api/v1/site_files/get/${file_id}`, {
+					method: 'post',
+					body:    params,
+					timeout: 5000,
+				})
+					.then(res => res.json())
+					.then(json => {
+						if(json.status === `ok`) {
+							return json;
+						}
+					})
+					.then(json => {
+						fs.writeFile(`${FILES_PATH}/${json['data']['file_name'].value}`, json['data']['file_content'].value, 'base64', function(err) {
+							if(err){
+								console.log(err);
+							}
+
+							console.log(`Скачан файл ${file_name}. Всего ${count} из ${arrLength}`);
+							getFile(array);
+							count++;
+						});
+					})
+					.catch(console.log)
+
+			}
+			getFile(array);
+		})
 }
 exports.browsersync = browsersync;
 exports.assets      = series(cleanimg, styles, scripts, images);
